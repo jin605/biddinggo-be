@@ -10,11 +10,9 @@ pipeline {
         stage('Build Image') {
             steps {
                 sh '''
-                  docker buildx build \
-                    --platform linux/amd64 \
+                  docker build \
                     -t $IMAGE_NAME:$IMAGE_TAG \
                     -t $IMAGE_NAME:latest \
-                    --load \
                     .
                 '''
             }
