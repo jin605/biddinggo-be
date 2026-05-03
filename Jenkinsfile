@@ -46,7 +46,6 @@ pipeline {
                         -fsS http://nginx/actuator/health
                     '''
                 }
-
             }
         }
     }
