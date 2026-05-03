@@ -38,16 +38,23 @@ pipeline {
                     git pull
                     docker-compose pull backend
                     docker-compose up -d backend nginx
-                    sleep 15
 
-                    docker run --rm \
-                        --network deploy_biddinggo-net \
-                        curlimages/curl:8.10.1 \
-                        -fsS http://nginx/actuator/health
+                    for i in $(seq 1 30); do
+                        if docker run --rm --network deploy_biddinggo-net curlimages/curl:8.10.1 -fsS http://nginx/actuator/health; then
+                        exit 0
+                        fi
+
+                        echo "Waiting for backend health check... ($i/30)"
+                        sleep 5
+                    done
+
+                    docker-compose logs --tail=120 backend
+                    exit 1
                     '''
                 }
             }
         }
+
     }
 
     post {
