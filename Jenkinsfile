@@ -39,10 +39,14 @@ pipeline {
                     docker-compose pull backend
                     docker-compose up -d backend nginx
                     sleep 15
-                    curl -f http://127.0.0.1:5173/actuator/health
+
+                    docker run --rm \
+                        --network deploy_biddinggo-net \
+                        curlimages/curl:8.10.1 \
+                        -fsS http://nginx/actuator/health
                     '''
                 }
-                
+
             }
         }
     }
